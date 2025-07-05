@@ -23,5 +23,5 @@ jobs:
             docker pull kamartinez/chatbot
             docker stop chatbot || true
             docker rm chatbot || true
-            docker run -d -p 80:80 --restart unless-stopped --name chatbot kamartinez/chatbot
+            docker run -d -p 8080:8080 --restart unless-stopped --name chatbot kamartinez/chatbot
           EOF
