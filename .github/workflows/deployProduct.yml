@@ -1,0 +1,27 @@
+name: Deploy IA to EC2 Production
+
+on:
+  pull_request:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH key
+        run: |
+          echo "$EC2_SSH_KEY" > key.pem
+          chmod 400 key.pem
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEYP }}
+
+      - name: Connect and run Docker on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@52.22.200.93 << 'EOF'
+            docker pull kamartinez/chatbot
+            docker stop chatbot || true
+            docker rm chatbot || true
+            docker run -d -p 8080:8080 --restart unless-stopped --name chatbot kamartinez/chatbot
+          EOF
