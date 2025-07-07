@@ -1,0 +1,5 @@
+Flask
+python-dotenv
+flask-restful
+openai==0.28
+flask-cors
